@@ -13,7 +13,7 @@ ext {
             retrofit              : "2.9.0",
             sandwich              : "1.0.9",
             hiltAndroid           : '2.37',
-            hiltLifeCycle         : '1.0.0',
+            hiltLifeCycle         : '1.0.0-alpha03',
             lottie                : '3.7.1',
             leakCanary            : '2.7',
             legacySupport         : "1.0.0",
