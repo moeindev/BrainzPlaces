@@ -1,0 +1,17 @@
+ext {
+    versions = [
+
+    ]
+
+    buildVersions = [
+
+    ]
+
+    libraries = [
+
+    ]
+
+    testLibraries = [
+
+    ]
+}
