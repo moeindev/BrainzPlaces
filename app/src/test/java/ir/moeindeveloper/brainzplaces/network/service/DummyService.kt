@@ -10,6 +10,6 @@ import retrofit2.http.GET
 interface DummyService {
 
     @GET("DummyGateway")
-    fun getDummies(): ApiResponse<DummyEntities>
+    suspend fun getDummies(): ApiResponse<DummyEntities>
 
 }
