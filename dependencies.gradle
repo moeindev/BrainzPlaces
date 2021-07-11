@@ -26,7 +26,8 @@ ext {
             coreTesting           : "2.1.0",
             mockWebServer         : '5.0.0-alpha.2',
             mockitoKotlin         : "2.2.0",
-            kotestAssertions      : "4.0.7"
+            kotestAssertions      : "4.0.7",
+            googleMaps: "17.0.1"
     ]
 
     buildVersions = [
@@ -62,7 +63,8 @@ ext {
             lottie                   : "com.airbnb.android:lottie:$versions.lottie",
             leakCanary               : "com.squareup.leakcanary:leakcanary-android:$versions.leakCanary",
             whatIf                   : "com.github.skydoves:whatif:$versions.whatIf",
-            bundler                  : "com.github.skydoves:bundler:$versions.bundler"
+            bundler                  : "com.github.skydoves:bundler:$versions.bundler",
+            googleMaps               :"com.google.android.gms:play-services-maps:$versions.googleMaps"
     ]
 
     testLibraries = [

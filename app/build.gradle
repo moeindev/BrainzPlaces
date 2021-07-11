@@ -72,6 +72,7 @@ dependencies {
 
     //hilt
     implementation libraries.hiltAndroid
+    implementation libraries.googleMaps
     kapt libraries.hiltCompiler
     implementation libraries.hiltLifeCycle
     kapt libraries.hiltLifeCycleCompiler
