@@ -16,6 +16,8 @@ android {
         versionCode buildVersions.versionCode
         versionName buildVersions.versionName
 
+        resValue("string", "maps_api_key", getApiKey())
+        
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -45,6 +47,12 @@ android {
     buildFeatures {
         dataBinding true
     }
+}
+String getApiKey() {
+    def propFile = rootProject.file("./local.properties")
+    def properties = new Properties()
+    properties.load(new FileInputStream(propFile))
+    return properties['MAPS_API_KEY']
 }
 
 dependencies {

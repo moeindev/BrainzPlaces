@@ -18,6 +18,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Access MAPS_API_KEY
+          env:
+            MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+          run: echo WEATHER_API_KEY=\"$MAPS_API_KEY\" > ./local.properties
       - name: Build with Gradle
         run: ./gradlew build
       - name: Run Unit Tests
