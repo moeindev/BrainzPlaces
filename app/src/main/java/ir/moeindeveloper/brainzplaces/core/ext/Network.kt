@@ -6,6 +6,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.fragment.app.Fragment
+import ir.moeindeveloper.brainzplaces.core.platform.fragment.BaseFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -44,3 +45,7 @@ fun Context.networkStateFlow(): Flow<Boolean> = callbackFlow {
 @ExperimentalCoroutinesApi
 val Fragment.networkStateFlow: Flow<Boolean>
     get() = requireContext().networkStateFlow()
+
+@ExperimentalCoroutinesApi
+inline fun BaseFragment<*>.onNetworkStateChanged(crossinline onChanged: (connected: Boolean) -> Unit) =
+    networkStateFlow.collectOnLifecycleScope(onChanged)
