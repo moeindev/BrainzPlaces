@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Brainz Places</string>
+    <string name="net_not_available">Network is not available</string>
+    <string name="back_online">Back online!</string>
 </resources>
