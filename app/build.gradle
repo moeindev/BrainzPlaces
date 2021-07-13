@@ -105,6 +105,7 @@ dependencies {
     testImplementation testLibraries.mockWebServer
     testImplementation testLibraries.mockitoKotlin
     testImplementation testLibraries.kotestAssertions
+    testImplementation testLibraries.turbine
     androidTestImplementation testLibraries.androidJUnit
     androidTestImplementation testLibraries.espressoCore
 }

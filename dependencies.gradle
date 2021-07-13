@@ -27,7 +27,8 @@ ext {
             mockWebServer         : '5.0.0-alpha.2',
             mockitoKotlin         : "2.2.0",
             kotestAssertions      : "4.0.7",
-            googleMaps: "17.0.1"
+            googleMaps: "17.0.1",
+            turbine: "0.5.2"
     ]
 
     buildVersions = [
@@ -77,6 +78,7 @@ ext {
             coreTesting          : "androidx.arch.core:core-testing:$versions.coreTesting",
             mockWebServer        : "com.squareup.okhttp3:mockwebserver:$versions.mockWebServer",
             mockitoKotlin        : "com.nhaarman.mockitokotlin2:mockito-kotlin:$versions.mockitoKotlin",
-            kotestAssertions     : "io.kotest:kotest-assertions:$versions.kotestAssertions"
+            kotestAssertions     : "io.kotest:kotest-assertions:$versions.kotestAssertions",
+            turbine                  : "app.cash.turbine:turbine:$versions.turbine"
     ]
 }
