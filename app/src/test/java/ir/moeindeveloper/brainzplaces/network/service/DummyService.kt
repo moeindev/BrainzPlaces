@@ -1,7 +1,7 @@
 package ir.moeindeveloper.brainzplaces.network.service
 
 import com.skydoves.sandwich.ApiResponse
-import ir.moeindeveloper.brainzplaces.network.entity.DummyEntities
+import ir.moeindeveloper.brainzplaces.network.entity.DummyEntity
 import retrofit2.http.GET
 
 /**
@@ -10,6 +10,6 @@ import retrofit2.http.GET
 interface DummyService {
 
     @GET("DummyGateway")
-    suspend fun getDummies(): ApiResponse<DummyEntities>
+    suspend fun getDummies(): ApiResponse<ArrayList<DummyEntity>>
 
 }
