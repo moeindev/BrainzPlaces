@@ -21,5 +21,7 @@ data class Place(
     @SerializedName("score")
     val score: String?,
     @SerializedName("type")
-    val type: String?
+    val type: String?,
+    @SerializedName("disambiguation")
+    val disambiguation: String?
 )
