@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ir.moeindeveloper.brainzplaces.core.network.AgentInterceptor
+import ir.moeindeveloper.brainzplaces.places.service.PlaceService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,7 +17,10 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val BASE_URL: String = "https://musicbrainz.org/ws/2/"
 
-    //TODO add services here
+    @Provides
+    @Singleton
+    fun providePlaceService(retrofit: Retrofit): PlaceService =
+        retrofit.create(PlaceService::class.java)
 
     @Provides
     @Singleton
