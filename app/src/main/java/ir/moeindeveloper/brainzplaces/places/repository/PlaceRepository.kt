@@ -10,6 +10,6 @@ interface PlaceRepository {
     /**
      * Search places using
      */
-    fun searchPlaces(query: String): Flow<UiState<List<Place>>>
+    suspend fun searchPlaces(query: String): UiState<List<Place>>
 
 }
