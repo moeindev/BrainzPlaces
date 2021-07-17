@@ -76,6 +76,37 @@ class BaseRepositoryTest {
         runQueryToTest(expectedResult)
     }
 
+    @Test
+    fun `Response Must be null`() = runBlocking {
+        val queryResult = ApiResponse.Failure.Error<ArrayList<DummyEntity>>(Response.error(403,"Forbidden".toResponseBody()))
+
+        val expectedResult = null
+
+        whenever(service.getDummies()).thenReturn(queryResult)
+
+        val actual = repository.takeExactValueFromTheAPI {
+            service.getDummies()
+        }
+
+        actual shouldBe expectedResult
+    }
+
+    @Test
+    fun `Response Must not be null`() = runBlocking {
+        val queryResult = ApiResponse.Success<ArrayList<DummyEntity>>(response = Response.success(MockResponses.dummyResponse))
+
+        val expectedResult = MockResponses.dummyResponse
+
+        whenever(service.getDummies()).thenReturn(queryResult)
+
+        val actual = repository.takeExactValueFromTheAPI {
+            service.getDummies()
+        }
+
+        actual shouldBe expectedResult
+    }
+
+
     private fun runQueryToTest( expectedResult: UiState<*>) = runBlocking {
         repository.apiRequest {
             service.getDummies()

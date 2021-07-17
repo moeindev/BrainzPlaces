@@ -36,4 +36,25 @@ abstract class BaseRepository {
             emit(UiState.failure<T>(this.statusCode.toString()))
         }
     }
+
+    /**
+     * Get the exact value of the api response
+     */
+    suspend fun <T> takeExactValueFromTheAPI(
+        request: suspend () -> ApiResponse<T>
+    ): T? {
+        var response: T? = null
+
+        request().suspendOnSuccess {
+            this.data.whatIfNotNull { data ->
+                response = data
+            }
+        }.suspendOnException {
+            response = null
+        }.suspendOnError {
+            response = null
+        }
+
+        return response
+    }
 }
