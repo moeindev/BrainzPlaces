@@ -13,5 +13,5 @@ data class PlacesResponse(
     @SerializedName("offset")
     val offset: Int,
     @SerializedName("places")
-    val places: List<Place>?
+    val places: List<Place>
 )
