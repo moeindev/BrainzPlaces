@@ -17,6 +17,7 @@ abstract class BaseRepository {
     /**
      * Converting [suspend] functions from services to [UiState].
      */
+    @Deprecated("We don't need this in our case")
     fun <T> apiRequest(
         request: suspend () -> ApiResponse<T>
     ): Flow<UiState<T>> = flow {
