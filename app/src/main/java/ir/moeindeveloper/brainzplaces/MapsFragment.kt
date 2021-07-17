@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -13,8 +15,18 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.skydoves.whatif.whatIfNotNull
+import dagger.hilt.android.AndroidEntryPoint
+import ir.moeindeveloper.brainzplaces.core.ext.appLog
+import ir.moeindeveloper.brainzplaces.places.action.PlaceActions
+import ir.moeindeveloper.brainzplaces.places.viewModel.PlaceViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MapsFragment : Fragment() {
+
+    private val viewModel by viewModels<PlaceViewModel>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -39,6 +51,21 @@ class MapsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_maps, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            viewModel.places.collect { state ->
+                appLog { "State is -> $state" }
+                state.whatIfNotNull { st ->
+                    st.data?.whatIfNotNull { data ->
+                        appLog { "data count is -> ${data.size}" }
+                    }
+                }
+            }
+        }
+
+        viewModel.doAction(PlaceActions.Search("god"))
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
