@@ -19,9 +19,9 @@ fun View.hideOnLoading(state: UiState<*>) {
 }
 
 @BindingAdapter("android:showOnLoading")
-fun View.showOnLoading(state: UiState<*>) {
+fun View.showOnLoading(state: UiState<*>?) {
     whatIf(
-        state.status == UiStatus.LOADING,
+        state?.status == UiStatus.LOADING,
         {
             visibility = View.VISIBLE
 
@@ -40,9 +40,9 @@ fun View.showOnLoading(state: UiState<*>) {
 }
 
 @BindingAdapter("android:showOnError")
-fun View.showOnError(state: UiState<*>) {
+fun View.showOnError(state: UiState<*>?) {
     whatIf(
-        state.status == UiStatus.Failure,
+        state?.status == UiStatus.Failure,
         {
             visibility = View.VISIBLE
 
@@ -51,7 +51,7 @@ fun View.showOnError(state: UiState<*>) {
             }
 
             isTextView { tv ->
-                state.errorMessage.whatIfNotNull { failure ->
+                state?.errorMessage.whatIfNotNull { failure ->
                     tv.text = failure
                 }
             }
@@ -78,8 +78,8 @@ fun View.hideOnError(state: UiState<*>) {
 }
 
 @BindingAdapter("android:showOnSuccess")
-fun View.showOnSuccess(state: UiState<*>) {
-    whatIf(state.status == UiStatus.SUCCESS) {
+fun View.showOnSuccess(state: UiState<*>?) {
+    whatIf(state?.status == UiStatus.SUCCESS) {
         visibility = View.VISIBLE
 
         isLottieAnimationView { lottie ->

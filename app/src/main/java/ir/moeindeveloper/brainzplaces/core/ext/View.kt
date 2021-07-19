@@ -1,10 +1,17 @@
 package ir.moeindeveloper.brainzplaces.core.ext
 
 import android.app.Activity
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 
 inline fun View.isLottieAnimationView(view: (LottieAnimationView) -> Unit) {
@@ -40,3 +47,26 @@ internal fun Activity.getStatusBarHeight(): Int {
     } else convertDpToPixel(25f)
     return titleBarHeight
 }
+
+
+@ExperimentalCoroutinesApi
+fun TextInputEditText.textChanges(): Flow<CharSequence?> =
+    callbackFlow {
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                appLog { "Before text $s" }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                appLog { "After text changed" }
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                trySend(s)
+            }
+        }
+
+        addTextChangedListener(listener)
+
+        awaitClose { removeTextChangedListener(listener) }
+    }
