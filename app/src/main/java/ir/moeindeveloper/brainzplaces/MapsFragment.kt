@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 
@@ -18,15 +19,22 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.skydoves.whatif.whatIfNotNull
 import dagger.hilt.android.AndroidEntryPoint
 import ir.moeindeveloper.brainzplaces.core.ext.appLog
+import ir.moeindeveloper.brainzplaces.core.ext.textChanges
+import ir.moeindeveloper.brainzplaces.core.platform.fragment.BaseFragment
+import ir.moeindeveloper.brainzplaces.databinding.FragmentMapsBinding
 import ir.moeindeveloper.brainzplaces.places.action.PlaceActions
 import ir.moeindeveloper.brainzplaces.places.viewModel.PlaceViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
-class MapsFragment : Fragment() {
+class MapsFragment : BaseFragment<FragmentMapsBinding>(R.layout.fragment_maps) {
 
-    private val viewModel by viewModels<PlaceViewModel>()
+    private val placeVM by viewModels<PlaceViewModel>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -41,34 +49,37 @@ class MapsFragment : Fragment() {
         val sydney = LatLng(-34.0, 151.0)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
         lifecycleScope.launch {
-            viewModel.places.collect { state ->
-                appLog { "State is -> $state" }
-                state.whatIfNotNull { st ->
-                    st.data?.whatIfNotNull { data ->
-                        appLog { "data count is -> ${data.size}" }
-                    }
-                }
+            placeVM.places.collect { state ->
+
             }
         }
-
-        viewModel.doAction(PlaceActions.Search("god"))
     }
+
+
+    @FlowPreview
+    @ExperimentalTime
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = placeVM
+            searchQuery.textChanges()
+                .distinctUntilChanged()
+                .filterNot { it.isNullOrBlank() }
+                .debounce(Duration.Companion.seconds(2))
+                .onEach { charSequence ->
+                    search(charSequence.toString())
+                }
+                .launchIn(lifecycleScope)
+        }
+    }
+
+    private fun search(query: String) {
+        placeVM.doAction(PlaceActions.Search(query = query))
     }
 }
