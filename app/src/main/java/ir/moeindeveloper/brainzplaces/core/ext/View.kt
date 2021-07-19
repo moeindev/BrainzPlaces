@@ -1,13 +1,12 @@
 package ir.moeindeveloper.brainzplaces.core.ext
 
 import android.app.Activity
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.doOnTextChanged
 import com.airbnb.lottie.LottieAnimationView
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -50,23 +49,11 @@ internal fun Activity.getStatusBarHeight(): Int {
 
 
 @ExperimentalCoroutinesApi
-fun TextInputEditText.textChanges(): Flow<CharSequence?> =
+fun EditText.textChanges(): Flow<CharSequence?> =
     callbackFlow {
-        val listener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                appLog { "Before text $s" }
-            }
 
-            override fun afterTextChanged(s: Editable?) {
-                appLog { "After text changed" }
-            }
+        val callBack = doOnTextChanged { text, _, _, _ -> trySend(text) }
+        addTextChangedListener(callBack)
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                trySend(s)
-            }
-        }
-
-        addTextChangedListener(listener)
-
-        awaitClose { removeTextChangedListener(listener) }
+        awaitClose { removeTextChangedListener(callBack) }
     }
