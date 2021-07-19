@@ -5,6 +5,7 @@ import ir.moeindeveloper.brainzplaces.core.ext.transformToFlow
 import ir.moeindeveloper.brainzplaces.core.platform.viewModel.BaseViewModel
 import ir.moeindeveloper.brainzplaces.core.state.UiState
 import ir.moeindeveloper.brainzplaces.places.action.PlaceActions
+import ir.moeindeveloper.brainzplaces.places.buildQuery
 import ir.moeindeveloper.brainzplaces.places.entity.Place
 import ir.moeindeveloper.brainzplaces.places.repository.PlaceRepository
 import kotlinx.coroutines.delay
@@ -20,7 +21,7 @@ class PlaceViewModel @Inject constructor(repository: PlaceRepository): BaseViewM
             if (action is PlaceActions.Search) {
                 emit(UiState.loading())
                 delay(1000L)
-                emit(repository.searchPlaces(action.query))
+                emit(repository.searchPlaces(action.query.buildQuery()))
             }
         }
     }
