@@ -4,9 +4,14 @@ import android.os.Build
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.skydoves.whatif.whatIfNotNull
+import ir.moeindeveloper.brainzplaces.core.ext.appLog
 import ir.moeindeveloper.brainzplaces.places.entity.Place
 import java.time.LocalDate
 import java.util.*
+import kotlin.concurrent.schedule
+import kotlin.math.abs
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 
 fun String.convertToYear(): Int? {
@@ -75,4 +80,23 @@ fun List<Place>.getAverageCoordinates(): LatLng {
     return LatLng(
         sumOfAllLat/size, sumOfAllLng/size
     )
+}
+
+/**
+ * filter [Place] by [markerTag]
+ */
+fun List<Place>.getPlaceByTag(tag: String): Place? =
+    firstOrNull { place -> place.markerTag() == tag }
+
+@ExperimentalTime
+fun Place.disappearAfterLifeSpan(shouldDisappear: (Place) -> Unit) {
+    appLog { "life span --> $lifeSpan" }
+    val startYear = lifeSpan?.begin?.convertToYear() ?: getCurrentYear()
+    val baseYear = 1990
+    val delayTime = Duration.seconds(abs(startYear - baseYear)).inWholeMilliseconds
+
+    appLog { "delay time -----> $delayTime" }
+    Timer("disappear marker", false).schedule(delayTime) {
+        shouldDisappear(this@disappearAfterLifeSpan)
+    }
 }

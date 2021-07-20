@@ -20,6 +20,7 @@ import ir.moeindeveloper.brainzplaces.core.platform.fragment.BaseFragment
 import ir.moeindeveloper.brainzplaces.core.state.UiStatus
 import ir.moeindeveloper.brainzplaces.databinding.FragmentMapsBinding
 import ir.moeindeveloper.brainzplaces.places.action.PlaceActions
+import ir.moeindeveloper.brainzplaces.places.disappearAfterLifeSpan
 import ir.moeindeveloper.brainzplaces.places.getAverageCoordinates
 import ir.moeindeveloper.brainzplaces.places.markerTag
 import ir.moeindeveloper.brainzplaces.places.toMarkerOptions
@@ -75,6 +76,11 @@ class MapsFragment : BaseFragment<FragmentMapsBinding>(R.layout.fragment_maps) {
                                 place.toMarkerOptions().whatIfNotNull { options ->
                                     val marker = googleMap?.addMarker(options)
                                     marker?.tag = place.markerTag()
+                                    place.disappearAfterLifeSpan {
+                                        activity?.runOnUiThread {
+                                            marker?.remove()
+                                        }
+                                    }
                                 }
                             }
                         }
