@@ -1,14 +1,10 @@
 package ir.moeindeveloper.brainzplaces.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import com.skydoves.sandwich.ApiResponse
 import io.kotest.matchers.shouldBe
 import ir.moeindeveloper.brainzplaces.MainCoroutinesRule
-import ir.moeindeveloper.brainzplaces.core.state.UiState
 import ir.moeindeveloper.brainzplaces.mocks.PlacesApiResponse
-import ir.moeindeveloper.brainzplaces.places.entity.Place
 import ir.moeindeveloper.brainzplaces.places.repository.PlaceRepository
 import ir.moeindeveloper.brainzplaces.places.repository.PlaceRepositoryImpl
 import ir.moeindeveloper.brainzplaces.places.service.PlaceService
@@ -18,6 +14,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import retrofit2.Response
 import kotlin.time.ExperimentalTime
 
@@ -25,7 +23,7 @@ import kotlin.time.ExperimentalTime
 @ExperimentalCoroutinesApi
 class PlaceRepositoryTest {
 
-    private val service: PlaceService = mock()
+    private val service: PlaceService = mock(PlaceService::class.java)
     private lateinit var repository: PlaceRepository
 
     @get:Rule
