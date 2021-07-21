@@ -1,11 +1,10 @@
 package ir.moeindeveloper.brainzplaces
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
+import ir.moeindeveloper.brainzplaces.core.platform.activity.BaseActivity
+import ir.moeindeveloper.brainzplaces.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
+@AndroidEntryPoint
+class MainActivity : BaseActivity<ActivityMainBinding>() {
+    override fun layoutRes(): Int = R.layout.activity_main
 }

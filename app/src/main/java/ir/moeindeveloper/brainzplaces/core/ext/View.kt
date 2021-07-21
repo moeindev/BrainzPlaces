@@ -3,8 +3,14 @@ package ir.moeindeveloper.brainzplaces.core.ext
 import android.app.Activity
 import android.util.DisplayMetrics
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.doOnTextChanged
 import com.airbnb.lottie.LottieAnimationView
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 
 inline fun View.isLottieAnimationView(view: (LottieAnimationView) -> Unit) {
@@ -40,3 +46,14 @@ internal fun Activity.getStatusBarHeight(): Int {
     } else convertDpToPixel(25f)
     return titleBarHeight
 }
+
+
+@ExperimentalCoroutinesApi
+fun EditText.textChanges(): Flow<CharSequence?> =
+    callbackFlow {
+
+        val callBack = doOnTextChanged { text, _, _, _ -> trySend(text) }
+        addTextChangedListener(callBack)
+
+        awaitClose { removeTextChangedListener(callBack) }
+    }

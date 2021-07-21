@@ -2,8 +2,6 @@ package ir.moeindeveloper.brainzplaces.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import com.skydoves.sandwich.ApiResponse
 import io.kotest.matchers.shouldBe
 import ir.moeindeveloper.brainzplaces.MainCoroutinesRule
@@ -19,13 +17,15 @@ import okio.IOException
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import retrofit2.Response
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 class BaseRepositoryTest {
 
-    private val service: DummyService = mock()
+    private val service: DummyService = mock(DummyService::class.java)
     private lateinit var repository: BaseRepository
     private val loadingType = UiState.loading<ArrayList<DummyEntity>>()
 
@@ -75,6 +75,37 @@ class BaseRepositoryTest {
 
         runQueryToTest(expectedResult)
     }
+
+    @Test
+    fun `Response Must be null`() = runBlocking {
+        val queryResult = ApiResponse.Failure.Error<ArrayList<DummyEntity>>(Response.error(403,"Forbidden".toResponseBody()))
+
+        val expectedResult = null
+
+        whenever(service.getDummies()).thenReturn(queryResult)
+
+        val actual = repository.takeExactValueFromTheAPI {
+            service.getDummies()
+        }
+
+        actual shouldBe expectedResult
+    }
+
+    @Test
+    fun `Response Must not be null`() = runBlocking {
+        val queryResult = ApiResponse.Success<ArrayList<DummyEntity>>(response = Response.success(MockResponses.dummyResponse))
+
+        val expectedResult = MockResponses.dummyResponse
+
+        whenever(service.getDummies()).thenReturn(queryResult)
+
+        val actual = repository.takeExactValueFromTheAPI {
+            service.getDummies()
+        }
+
+        actual shouldBe expectedResult
+    }
+
 
     private fun runQueryToTest( expectedResult: UiState<*>) = runBlocking {
         repository.apiRequest {
