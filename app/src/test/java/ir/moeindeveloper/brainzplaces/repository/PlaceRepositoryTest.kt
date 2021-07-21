@@ -42,7 +42,7 @@ class PlaceRepositoryTest {
     fun `Big data response`() = runBlocking {
         val queryResult = ApiResponse.Success(response = Response.success(PlacesApiResponse.longRange.toPlaceResponse()))
 
-        val expectedCount = 52
+        val expectedCount = 25
 
         whenever(service.searchPlaces(
             "ok"
@@ -56,7 +56,7 @@ class PlaceRepositoryTest {
     fun `Average data response`() = runBlocking {
         val queryResult = ApiResponse.Success(response = Response.success(PlacesApiResponse.averageRange.toPlaceResponse()))
 
-        val expectedCount = 28
+        val expectedCount = 20
 
         whenever(service.searchPlaces(
             "god"
