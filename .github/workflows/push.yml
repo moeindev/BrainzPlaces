@@ -2,6 +2,9 @@ name: Testing latest pushed commits
 
 on:
   push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
 
 jobs:
   build:
@@ -15,7 +18,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build with Gradle after putting API KEY
+      - name: Access MAPS_API_KEY
+        env:
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+        run: echo MAPS_API_KEY=\"$MAPS_API_KEY\" > ./local.properties
+      - name: Build with Gradle
         run: ./gradlew build
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest

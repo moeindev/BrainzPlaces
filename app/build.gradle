@@ -16,6 +16,8 @@ android {
         versionCode buildVersions.versionCode
         versionName buildVersions.versionName
 
+        resValue("string", "maps_api_key", getApiKey())
+        
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -46,6 +48,12 @@ android {
         dataBinding true
     }
 }
+String getApiKey() {
+    def propFile = rootProject.file("./local.properties")
+    def properties = new Properties()
+    properties.load(new FileInputStream(propFile))
+    return properties['MAPS_API_KEY']
+}
 
 dependencies {
     implementation libraries.coroutines
@@ -72,6 +80,7 @@ dependencies {
 
     //hilt
     implementation libraries.hiltAndroid
+    implementation libraries.googleMaps
     kapt libraries.hiltCompiler
     implementation libraries.hiltLifeCycle
     kapt libraries.hiltLifeCycleCompiler
@@ -95,7 +104,9 @@ dependencies {
     testImplementation testLibraries.coreTesting
     testImplementation testLibraries.mockWebServer
     testImplementation testLibraries.mockitoKotlin
+    testImplementation testLibraries.mokitoInline
     testImplementation testLibraries.kotestAssertions
+    testImplementation testLibraries.turbine
     androidTestImplementation testLibraries.androidJUnit
     androidTestImplementation testLibraries.espressoCore
 }
